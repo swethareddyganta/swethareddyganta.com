@@ -1,5 +1,94 @@
 import Link from "next/link"
 import { ArrowRight, Github, Linkedin, Mail, FileText } from "lucide-react"
+import ProjectCard from "@/components/project-card"
+import EducationCard from "@/components/education-card"
+
+function SocialButton({ href, icon, label, download, target }) {
+  return (
+    <Link
+      href={href}
+      className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/15 border border-gray-800 rounded-md transition-colors"
+      target={target || (href.startsWith("mailto:") ? undefined : "_blank")}
+      download={download}
+    >
+      {icon}
+      <span className="text-sm font-medium">{label}</span>
+    </Link>
+  )
+}
+
+function ResearchInterest({ title, description }) {
+  return (
+    <div className="border-b border-gray-800 pb-4 last:border-0 last:pb-0">
+      <h4 className="text-lg font-medium mb-2">{title}</h4>
+      <p className="text-gray-400 text-sm">{description}</p>
+    </div>
+  )
+}
+
+function ExperienceCard({ title, company, companyLink, period, description, achievements, image }) {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <div className="lg:col-span-1">
+        <div className="card overflow-hidden">
+          <img
+            src={image || "/placeholder.svg?height=200&width=300"}
+            alt={company}
+            className="w-full h-24 object-cover"
+          />
+        </div>
+      </div>
+      <div className="lg:col-span-2">
+        <div className="card p-6">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-4">
+            <div>
+              <h3 className="text-xl font-medium mb-1">{title}</h3>
+              <Link
+                href={companyLink}
+                target="_blank"
+                className="text-purple-400 text-sm mb-1 hover:text-purple-300 transition-colors"
+              >
+                {company}
+              </Link>
+            </div>
+            <p className="text-gray-400 text-sm whitespace-nowrap">{period}</p>
+          </div>
+          <p className="text-gray-300 text-sm mb-4">{description}</p>
+          <h4 className="text-lg font-medium mb-3">Key Achievements</h4>
+          <ul className="list-disc pl-5 space-y-1 text-gray-300 text-sm">
+            {achievements.map((achievement, index) => (
+              <li key={index}>{achievement}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function SkillCard({ category, skills }) {
+  return (
+    <div className="card p-6 h-full">
+      <h3 className="text-xl font-medium mb-6">{category}</h3>
+      <div className="space-y-4">
+        {skills.map((skill, index) => (
+          <div key={index}>
+            <div className="flex justify-between mb-1">
+              <span className="text-sm">{skill.name}</span>
+              <span className="text-sm text-gray-400">{skill.level}%</span>
+            </div>
+            <div className="w-full bg-gray-800 rounded-full h-2">
+              <div
+                className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full"
+                style={{ width: `${skill.level}%` }}
+              ></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default function Home() {
   return (
@@ -341,168 +430,6 @@ export default function Home() {
         </div>
       </footer>
     </main>
-  )
-}
-
-function SocialButton({ href, icon, label, download, target }) {
-  return (
-    <Link
-      href={href}
-      className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/15 border border-gray-800 rounded-md transition-colors"
-      target={target || (href.startsWith("mailto:") ? undefined : "_blank")}
-      download={download}
-    >
-      {icon}
-      <span className="text-sm font-medium">{label}</span>
-    </Link>
-  )
-}
-
-function ResearchInterest({ title, description }) {
-  return (
-    <div className="border-b border-gray-800 pb-4 last:border-0 last:pb-0">
-      <h4 className="text-lg font-medium mb-2">{title}</h4>
-      <p className="text-gray-400 text-sm">{description}</p>
-    </div>
-  )
-}
-
-function EducationCard({ institution, degree, specialization, period, location, image, link }) {
-  return (
-    <div className="card group overflow-hidden">
-      <div className="relative h-48 overflow-hidden">
-        <img
-          src={image || "/placeholder.svg?height=200&width=300"}
-          alt={institution}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      </div>
-      <div className="p-6">
-        <Link href={link} target="_blank" className="inline-block hover:text-purple-400 transition-colors">
-          <h3 className="text-xl font-medium mb-2">{institution}</h3>
-        </Link>
-        <p className="text-purple-400 text-sm mb-1">{degree}</p>
-        <p className="text-blue-400 text-sm mb-4">{specialization}</p>
-        <div className="flex justify-between text-sm text-gray-400">
-          <span>{period}</span>
-          <span>{location}</span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function ProjectCard({ title, subtitle, description, image, tags, githubLink, paperLink }) {
-  return (
-    <div className="card group">
-      <div className="relative h-48 overflow-hidden">
-        <img
-          src={image || "/placeholder.svg?height=200&width=300"}
-          alt={title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          onError={(e) => {
-            e.currentTarget.onerror = null
-            e.currentTarget.src = "/placeholder.svg?height=200&width=300"
-          }}
-        />
-      </div>
-      <div className="p-6">
-        <h3 className="text-xl font-medium mb-1">{title}</h3>
-        <p className="text-purple-400 text-sm mb-3">{subtitle}</p>
-        <p className="text-gray-400 text-sm mb-4">{description}</p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {tags.map((tag, index) => (
-            <span key={index} className="text-xs px-2 py-1 bg-gray-800 rounded-md">
-              {tag}
-            </span>
-          ))}
-        </div>
-        <div className="flex flex-wrap gap-4">
-          <Link
-            href={githubLink}
-            className="inline-flex items-center text-sm text-white hover:text-purple-400 transition-colors"
-            target="_blank"
-          >
-            <Github className="mr-2 h-4 w-4" />
-            View on GitHub
-          </Link>
-          {paperLink && (
-            <Link
-              href={paperLink}
-              className="inline-flex items-center text-sm text-white hover:text-purple-400 transition-colors"
-              target="_blank"
-            >
-              <ArrowRight className="mr-2 h-4 w-4" />
-              Research Paper
-            </Link>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function ExperienceCard({ title, company, companyLink, period, description, achievements, image }) {
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-      <div className="lg:col-span-1">
-        <div className="card overflow-hidden">
-          <img
-            src={image || "/placeholder.svg?height=200&width=300"}
-            alt={company}
-            className="w-full h-24 object-cover"
-          />
-        </div>
-      </div>
-      <div className="lg:col-span-2">
-        <div className="card p-6">
-          <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-4">
-            <div>
-              <h3 className="text-xl font-medium mb-1">{title}</h3>
-              <Link
-                href={companyLink}
-                target="_blank"
-                className="text-purple-400 text-sm mb-1 hover:text-purple-300 transition-colors"
-              >
-                {company}
-              </Link>
-            </div>
-            <p className="text-gray-400 text-sm whitespace-nowrap">{period}</p>
-          </div>
-          <p className="text-gray-300 text-sm mb-4">{description}</p>
-          <h4 className="text-lg font-medium mb-3">Key Achievements</h4>
-          <ul className="list-disc pl-5 space-y-1 text-gray-300 text-sm">
-            {achievements.map((achievement, index) => (
-              <li key={index}>{achievement}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function SkillCard({ category, skills }) {
-  return (
-    <div className="card p-6 h-full">
-      <h3 className="text-xl font-medium mb-6">{category}</h3>
-      <div className="space-y-4">
-        {skills.map((skill, index) => (
-          <div key={index}>
-            <div className="flex justify-between mb-1">
-              <span className="text-sm">{skill.name}</span>
-              <span className="text-sm text-gray-400">{skill.level}%</span>
-            </div>
-            <div className="w-full bg-gray-800 rounded-full h-2">
-              <div
-                className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full"
-                style={{ width: `${skill.level}%` }}
-              ></div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
   )
 }
 

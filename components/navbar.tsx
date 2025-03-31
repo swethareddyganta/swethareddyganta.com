@@ -97,7 +97,19 @@ export default function Navbar() {
   )
 }
 
-function NavLink({ href, label, pathname, onClick, mobile = false }) {
+function NavLink({
+  href,
+  label,
+  pathname,
+  onClick,
+  mobile = false,
+}: {
+  href: string
+  label: string
+  pathname: string
+  onClick: () => void
+  mobile?: boolean
+}) {
   const isActive = pathname === href
 
   return (
